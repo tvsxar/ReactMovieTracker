@@ -1,0 +1,143 @@
+.header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    width: auto;
+}
+
+.logo-title {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+
+    margin-left: max(9rem, 10vw);
+    margin-right: max(1rem, 5vw);
+
+    .nav-item {
+        font-size: 1rem;
+    }
+}
+
+.nav-form {
+    display: flex;
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(33, 33, 33, 0.5);
+    backdrop-filter: blur(10px); 
+
+    input {
+        color: #fff;
+    }
+
+    button {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-left: 0.5rem;
+    }
+}
+
+.burger-menu {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        gap: 3.5rem;
+        margin-left: max(6.5rem, 10vw);
+
+        .nav-item {
+            font-size: 0.85rem;
+        }
+    }
+
+    .logo-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-nav {
+        flex-direction: column;
+    }
+
+    .header-top {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .burger-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        cursor: pointer;
+        position: relative;
+
+        &.open {
+            span {
+                &:nth-child(1) {
+                    transform: translateY(0.555rem) rotate(45deg);
+                }
+            
+                &:nth-child(2) {
+                    opacity: 0;
+                }
+            
+                &:nth-child(3) {
+                    transform: translateY(-0.5rem) rotate(-45deg);
+                }
+            }
+        }
+
+        span {
+            display: block;
+            width: 1.5rem;
+            height: 2px;
+            background: white;
+            transition: 0.3s;
+        }
+    }
+
+    .navbar {
+        flex-direction: column;
+        width: 100%;
+        list-style: none;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        max-height: 0;
+        transition: all 0.3s ease-in-out;
+
+        &.open {
+            max-height: 40rem;
+            margin-top: 1rem;
+            margin: 1rem 0 0;
+        }
+
+        .nav-item {
+            font-size: 1rem;
+        }
+    }
+
+    .nav-form {
+        width: 100%;
+        margin-top: 1rem;
+        transition: margin-top 0.3s ease-in-out;
+    }
+}

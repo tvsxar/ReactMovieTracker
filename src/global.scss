@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+
+* {
+  user-select: none;
+}
+
+body {
+  background: #121212;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+}
+
+.container {
+  max-width: 95%;
+
+  @media (max-width: 768px) {
+    max-width: 97%;
+  }
+
+  @media (max-width: 425px) {
+    max-width: 100%;
+  }
+}
