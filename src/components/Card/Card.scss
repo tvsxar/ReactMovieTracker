@@ -1,0 +1,36 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    max-width: 45rem;
+    width: 80%;
+    height: 27.5rem;
+    border-radius: 1.5625rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.card-title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-radius: 1.5625rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.23) 0%, rgba(255, 255, 255, 0.10) 100%);
+    backdrop-filter: blur(15px);
+}
+
+.card-title {
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.card-genre {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

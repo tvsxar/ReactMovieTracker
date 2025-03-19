@@ -6,12 +6,13 @@ import { MovieContext } from '../../MovieContext/MovieContext';
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from 'swiper/modules';
 
 // components
 import Card from '../../Card/Card';
 
 // types
-import type { Movie } from '../../MovieContext/MovieContext'; 
+import type { Movie } from '../../MovieContext/MovieContext';
 interface HeaderContentProps {
     setBackground: (bg: string) => void;
 }
@@ -21,28 +22,33 @@ function HeaderContent({setBackground} : HeaderContentProps) {
     const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
 
     useEffect(() => {
-        if(movies.length > 0) {
-            const shuffled = [...movies].sort(() => 0.5 - Math.random());
-
-            // ?? check if movie have bg image
-            setRandomMovies(shuffled.slice(0, 5));
-
-            setBackground(randomMovies[0]?.backdrop_path || '');
+        if (movies.length > 0) {
+            const shuffled = [...movies]
+                .sort(() => 0.5 - Math.random()) // mix
+                .filter(movie => movie.backdrop_path) // only with bg
+                .slice(0, 5); // 5 random
+    
+            setRandomMovies(shuffled);
+            setBackground(shuffled[0]?.backdrop_path || '');
         }
-    }, [movies])
+    }, [movies]);
 
     return (
         <div className="header-content">
             <Swiper
-                spaceBetween={10}
+                spaceBetween={0}
                 slidesPerView={1}
+                loop={true}
+                autoplay={{ delay: 5000 }}
+                pagination={{ clickable: true }}
+                navigation={true}
                 onSlideChange={(swiper) => {
                     setBackground(randomMovies[swiper.activeIndex]?.backdrop_path || "");
                 }}
             >
                 {randomMovies.map((movie) => (
                     <SwiperSlide key={movie.id}>
-                        <Card randomMovies={randomMovies} />
+                        <Card movie={movie} />
                     </SwiperSlide>
                 ))}
             </Swiper>

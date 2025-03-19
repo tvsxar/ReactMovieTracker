@@ -12,7 +12,6 @@ function Header() {
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
     return (
-        // add styles for bg image
         <header className="header" style={{backgroundImage: background ? `url(${IMAGE_BASE_URL}${background})` : 'none'}}>
             <div className="container">
                 <HeaderNav />
