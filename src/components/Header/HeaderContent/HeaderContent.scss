@@ -1,0 +1,24 @@
+.header-content {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 5rem;
+}
+
+.swiper {
+    display: flex;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.swiper-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}

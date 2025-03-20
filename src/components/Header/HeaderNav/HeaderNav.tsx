@@ -34,7 +34,7 @@ function HeaderNav() {
             </ul>
 
             <form className='nav-form'>
-                <input placeholder='Enter name...' type="text" />
+                <input placeholder='Enter title...' type="text" />
                 <button className='search-btn'>
                     <img src={searchImg} alt="search" />
                 </button>

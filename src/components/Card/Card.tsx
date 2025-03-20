@@ -1,7 +1,7 @@
 import './Card.scss';
 
 // react + context
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { MovieContext } from '../MovieContext/MovieContext'; 
 
 // types
@@ -19,8 +19,20 @@ interface CardProps {
 }
 
 function Card({movie} : CardProps) {
+    const [isMobile, setIsMobile] = useState<boolean>(false);
     const { genres } = useContext(MovieContext) ?? { genres: [] };
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
 
     function getGenre(genre_ids : number[]) {
         return genres
@@ -30,7 +42,7 @@ function Card({movie} : CardProps) {
     }
 
     return (
-        <div className="card" style={{backgroundImage: `url(${IMAGE_BASE_URL}${movie.backdrop_path})`}}>
+        <div className="card" style={{backgroundImage: `url(${IMAGE_BASE_URL}${isMobile ? movie.poster_path : movie.backdrop_path})`}}>
             <div className="card-title-container">
                 <div className="card-title">{movie.title}</div>
 

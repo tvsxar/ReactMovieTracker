@@ -42,6 +42,12 @@
 
     input {
         color: #fff;
+
+        &::placeholder {
+            color: #fff;
+            opacity: 0.5;
+            mix-blend-mode: difference;
+        }
     }
 
     button {

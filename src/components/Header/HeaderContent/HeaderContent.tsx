@@ -6,7 +6,6 @@ import { MovieContext } from '../../MovieContext/MovieContext';
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from 'swiper/modules';
 
 // components
 import Card from '../../Card/Card';
@@ -43,7 +42,7 @@ function HeaderContent({setBackground} : HeaderContentProps) {
                 pagination={{ clickable: true }}
                 navigation={true}
                 onSlideChange={(swiper) => {
-                    setBackground(randomMovies[swiper.activeIndex]?.backdrop_path || "");
+                    setBackground(randomMovies[swiper.realIndex]?.backdrop_path || "");
                 }}
             >
                 {randomMovies.map((movie) => (
