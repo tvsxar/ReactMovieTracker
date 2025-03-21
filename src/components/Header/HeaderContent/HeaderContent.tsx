@@ -24,7 +24,7 @@ function HeaderContent({setBackground} : HeaderContentProps) {
         if (movies.length > 0) {
             const shuffled = [...movies]
                 .sort(() => 0.5 - Math.random()) // mix
-                .filter(movie => movie.backdrop_path) // only with bg
+                .filter(movie => movie.backdrop_path && movie.poster_path) // only with bg
                 .slice(0, 5); // 5 random
     
             setRandomMovies(shuffled);

@@ -30,7 +30,7 @@ function HeaderNav() {
                 <li className="nav-item">Home</li>
                 <li className="nav-item">Movies</li>
                 <li className="nav-item">Series</li>
-                <li className="nav-item">Genres</li>
+                <li className="nav-item">Saved</li>
             </ul>
 
             <form className='nav-form'>

@@ -4,7 +4,7 @@ import React, {createContext, useState, useEffect} from 'react';
 export interface Movie {
     id: number,
     title: string,
-    name?: string,
+    name: string,
     poster_path: string,
     backdrop_path?: string,
     genre_ids: number[],
@@ -47,9 +47,13 @@ export function MovieProvider({ children } : MovieProviderProps)  {
     // genres
     async function fetchGenres() {
         try {
-            const response = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
-            const data = await response.json();
-            setGenres(data.genres);
+            const movieGenresRes = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`);
+            const movieGenresData = await movieGenresRes.json();
+                
+            const tvGenresRes = await fetch(`${BASE_URL}/genre/tv/list?api_key=${API_KEY}&language=en-US`);
+            const tvGenresData = await tvGenresRes.json();
+                
+            setGenres([...movieGenresData.genres, ...tvGenresData.genres]);
         } catch(err) {
             console.error('Loading genres error:', err);
         }
