@@ -1,8 +1,8 @@
 import './Card.scss';
 
-// react + context
+// react + context + chroma
 import { useContext, useState, useEffect } from "react";
-import { MovieContext } from '../MovieContext/MovieContext'; 
+import { MovieContext } from '../MovieContext/MovieContext';
 
 // types
 interface CardProps {
