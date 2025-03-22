@@ -71,6 +71,12 @@
         margin-right: 3rem;
         gap: 2.5rem;
     }
+
+    .footer-info {
+        .email {
+            font-size: 1rem;
+        }
+    }
 }
 
 @media (max-width: 768px) {
@@ -95,6 +101,10 @@
         .socials {
             gap: 3rem;
         }
+
+        .email {
+            font-size: 0.95rem;
+        }
     }
 }
 
@@ -105,17 +115,21 @@
 
     .footer-nav {
         gap: 1rem;
+
+        .navbar-column {
+            .navbar-title {
+                font-size: 1.25rem;
+            }
+
+            .navbar-item {
+                font-size: 0.8rem;
+            }
+        }
     }
 
-    .navbar-title {
-        font-size: 1rem;
-    }
-
-    .email {
-        font-size: 0.75rem;
-    }
-
-    .navbar-item {
-        font-size: 0.85rem;
+    .footer-info {
+        .email {
+            font-size: 0.9rem;
+        }
     }
 }

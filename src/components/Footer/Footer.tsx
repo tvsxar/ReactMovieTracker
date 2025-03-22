@@ -13,7 +13,7 @@ function Footer() {
           <div className="footer-info">
             <div className="logo">GII</div>
 
-            <span className="email">tvsxar@gmail.com</span>
+            <p className="email">tvsxar@gmail.com</p>
 
             <div className="socials">
               <a href="#!"><img src={facebook} alt="facebook" className="social-icon" /></a>
