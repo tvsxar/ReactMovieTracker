@@ -29,7 +29,7 @@ function HeaderNav() {
             <ul className={`navbar ${isMenuOpen ? 'open' : ''}`}>
                 <li className="nav-item">Home</li>
                 <li className="nav-item">Movies</li>
-                <li className="nav-item">Series</li>
+                <li className="nav-item">TV Shows</li>
                 <li className="nav-item">Saved</li>
             </ul>
 

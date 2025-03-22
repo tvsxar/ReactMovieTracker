@@ -10,11 +10,11 @@ import { MovieContext } from '../../MovieContext/MovieContext';
 // types
 import type { Movie } from '../../MovieContext/MovieContext';
 interface CardListProps {
-    contentType?: 'Movies' | 'Series';
+    contentType?: 'Movies' | 'TV Shows';
 }
 
 function CardList({contentType} : CardListProps) {
-    const { movies, series } = useContext(MovieContext) ?? { movies: [], series: [] };
+    const { movies, shows } = useContext(MovieContext) ?? { movies: [], shows: [] };
     const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
     const [slideAmount, setSlideAmount] = useState<number>(6);
 
@@ -38,7 +38,7 @@ function CardList({contentType} : CardListProps) {
     
     // random movies
     useEffect(() => {
-        const CardListContentType = contentType === 'Movies' ? movies : series;
+        const CardListContentType = contentType === 'Movies' ? movies : shows;
 
         const shuffled = [...CardListContentType]
             .sort(() => 0.5 - Math.random()) // mix
@@ -47,7 +47,7 @@ function CardList({contentType} : CardListProps) {
         
         setRandomMovies(shuffled);
 
-    }, [movies, series, slideAmount]);
+    }, [movies, shows, slideAmount]);
 
     return (
         <div className="card-list">

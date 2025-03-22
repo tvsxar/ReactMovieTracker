@@ -9,7 +9,7 @@ function Recommendations() {
             <div className="container">
                 <div className="card-lists">
                     <CardList contentType={`Movies`} />
-                    <CardList contentType={`Series`} />
+                    <CardList contentType={`TV Shows`} />
                 </div>
             </div>
         </section>

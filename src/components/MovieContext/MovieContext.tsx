@@ -20,9 +20,9 @@ interface Genre {
 interface MovieContextType {
     genres: Genre[];
     movies: Movie[];
-    series: Movie[];
+    shows: Movie[];
     filteredMovies: Movie[];
-    filteredSeries: Movie[];
+    filteredShows: Movie[];
     filterByGenre: (genreId: number, type: 'movie' | 'tv') => void;
 }
 
@@ -36,9 +36,9 @@ export const MovieContext = createContext<MovieContextType | null>(null);
 export function MovieProvider({ children } : MovieProviderProps)  {
     const [genres, setGenres] = useState<Genre[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [series, setSeries] = useState<Movie[]>([]);
+    const [shows, setShows] = useState<Movie[]>([]);
     const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
-    const [filteredSeries, setFilteredSeries] = useState<Movie[]>([]);
+    const [filteredShows, setFilteredShows] = useState<Movie[]>([]);
 
     // API
     const API_KEY = `deddcdf61311b4dd7da8c0a3d2bf5042`;
@@ -70,12 +70,12 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         }
     }
 
-    // popular series
-    async function fetchSeries() {
+    // popular shows
+    async function fetchShows() {
         try {
             const response = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}`);
             const data = await response.json();
-            setSeries(data.results);
+            setShows(data.results);
         } catch (error) {
             console.error('Loading series error:', error);
         }  
@@ -85,18 +85,18 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         if(type === 'movie') {
             setFilteredMovies(movies.filter(movie => movie.genre_ids.includes(genreId)));
         } else {
-            setFilteredSeries(series.filter(serie => serie.genre_ids.includes(genreId)));
+            setFilteredShows(shows.filter(show => show.genre_ids.includes(genreId)));
         }
     }
 
     useEffect(() => {
         fetchGenres();
         fetchMovies();
-        fetchSeries();
+        fetchShows();
     }, []);
 
     return (
-        <MovieContext.Provider value={{ genres, movies, series, filteredMovies, filteredSeries, filterByGenre }}>
+        <MovieContext.Provider value={{ genres, movies, shows, filteredMovies, filteredShows, filterByGenre }}>
           {children}
         </MovieContext.Provider>
     );
