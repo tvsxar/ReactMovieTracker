@@ -12,17 +12,24 @@ export interface Movie {
     vote_average: number,
 }
 
-interface Genre {
+export interface Genre {
     id: number,
     name: string,
 }
 
+interface GenreList {
+    genres: Genre[]
+}
+
 interface MovieContextType {
     genres: Genre[];
+    movieGenres: GenreList;
+    showGenres: GenreList;
     movies: Movie[];
     shows: Movie[];
-    filteredMovies: Movie[];
-    filteredShows: Movie[];
+    trending: Movie[];
+    filteredMovies?: Movie[];
+    filteredShows?: Movie[];
     filterByGenre: (genreId: number, type: 'movie' | 'tv') => void;
 }
 
@@ -35,11 +42,13 @@ export const MovieContext = createContext<MovieContextType | null>(null);
 
 export function MovieProvider({ children } : MovieProviderProps)  {
     const [genres, setGenres] = useState<Genre[]>([]);
+    const [movieGenres, setMovieGenres] = useState<GenreList>({ genres: [] });
+    const [showGenres, setShowGenres] = useState<GenreList>({ genres: [] });
     const [movies, setMovies] = useState<Movie[]>([]);
     const [shows, setShows] = useState<Movie[]>([]);
+    const [trending, setTrending] = useState<Movie[]>([]);
     const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
     const [filteredShows, setFilteredShows] = useState<Movie[]>([]);
-
     // API
     const API_KEY = `deddcdf61311b4dd7da8c0a3d2bf5042`;
     const BASE_URL = `https://api.themoviedb.org/3`;
@@ -49,13 +58,26 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         try {
             const movieGenresRes = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`);
             const movieGenresData = await movieGenresRes.json();
+            setMovieGenres(movieGenresData);
                 
             const tvGenresRes = await fetch(`${BASE_URL}/genre/tv/list?api_key=${API_KEY}&language=en-US`);
             const tvGenresData = await tvGenresRes.json();
+            setShowGenres(tvGenresData);
                 
             setGenres([...movieGenresData.genres, ...tvGenresData.genres]);
         } catch(err) {
             console.error('Loading genres error:', err);
+        }
+    }
+
+    // trending movies
+    async function fetchTrendingMovies() {
+        try {
+            const response = await fetch(`${BASE_URL}/trending/all/day?api_key=${API_KEY}`);
+            const data = await response.json();
+            setTrending(data.results);
+        } catch (error) {
+            console.error('Loading trending movies error:', error);
         }
     }
 
@@ -93,10 +115,11 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         fetchGenres();
         fetchMovies();
         fetchShows();
+        fetchTrendingMovies();
     }, []);
 
     return (
-        <MovieContext.Provider value={{ genres, movies, shows, filteredMovies, filteredShows, filterByGenre }}>
+        <MovieContext.Provider value={{ genres, movies, shows, trending, movieGenres, showGenres, filterByGenre }}>
           {children}
         </MovieContext.Provider>
     );

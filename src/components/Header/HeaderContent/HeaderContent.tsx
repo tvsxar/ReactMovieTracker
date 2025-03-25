@@ -17,12 +17,12 @@ interface HeaderContentProps {
 }
 
 function HeaderContent({setBackground} : HeaderContentProps) {
-    const { movies } = useContext(MovieContext) ?? { movies: [] };
+    const { trending } = useContext(MovieContext) ?? { trending: [] };
     const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
 
     useEffect(() => {
-        if (movies.length > 0) {
-            const shuffled = [...movies]
+        if (trending.length > 0) {
+            const shuffled = [...trending]
                 .sort(() => 0.5 - Math.random()) // mix
                 .filter(movie => movie.backdrop_path && movie.poster_path) // only with bg
                 .slice(0, 5); // 5 random
@@ -30,7 +30,7 @@ function HeaderContent({setBackground} : HeaderContentProps) {
             setRandomMovies(shuffled);
             setBackground(shuffled[0]?.backdrop_path || '');
         }
-    }, [movies]);
+    }, [trending]);
 
     return (
         <div className="header-content">

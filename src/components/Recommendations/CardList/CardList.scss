@@ -17,6 +17,10 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
+    &:hover {
+        border-bottom: 0.15rem solid #fff;
+    }
 }
 
 .cards {
@@ -40,11 +44,11 @@
     }
 
     .card-list-title {
-        font-size: 1.85rem;
+        font-size: 1.75rem;
     }
 
     .card-title-link {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -54,10 +58,10 @@
     }
 
     .card-list-title {
-        font-size: 1.75rem;
+        font-size: 1.65rem;
     }
 
     .card-title-link {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 }

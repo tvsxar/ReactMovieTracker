@@ -30,6 +30,10 @@
 
     .nav-item {
         font-size: 1rem;
+        
+        &:hover {
+            border-bottom: 0.15rem solid #fff;
+        }
     }
 }
 
@@ -137,6 +141,7 @@
 
         .nav-item {
             font-size: 1rem;
+            font-weight: 500;
         }
     }
 

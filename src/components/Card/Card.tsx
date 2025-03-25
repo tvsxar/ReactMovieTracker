@@ -26,9 +26,7 @@ function Card({movie, isMini} : CardProps) {
 
     if (!movie) {
         return;
-    }
-
-    console.log("Movie data:", movie); 
+    } 
 
     useEffect(() => {
         const handleResize = () => {

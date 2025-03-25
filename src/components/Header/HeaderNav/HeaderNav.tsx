@@ -1,5 +1,7 @@
 import './HeaderNav.scss';
 
+// react + Link
+import { Link } from 'react-router-dom';
 import {useState} from 'react';
 
 // images
@@ -10,6 +12,10 @@ function HeaderNav() {
 
     function toggleMenu() {
         setIsMenuOpen(prev => !prev)
+    }
+
+    function closeMenu() {
+        setIsMenuOpen(false);
     }
 
     return (
@@ -27,10 +33,10 @@ function HeaderNav() {
             </div>
 
             <ul className={`navbar ${isMenuOpen ? 'open' : ''}`}>
-                <li className="nav-item">Home</li>
-                <li className="nav-item">Movies</li>
-                <li className="nav-item">TV Shows</li>
-                <li className="nav-item">Saved</li>
+                <li className="nav-item" onClick={closeMenu}><Link to='/'>Home</Link></li>
+                <li className="nav-item" onClick={closeMenu}><Link to='/movies'>Movies</Link></li>
+                <li className="nav-item" onClick={closeMenu}><Link to='/tvshows'>TV Shows</Link></li>
+                <li className="nav-item" onClick={closeMenu}><Link to='/saved'>Saved</Link></li>
             </ul>
 
             <form className='nav-form'>

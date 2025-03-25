@@ -3,9 +3,10 @@ import './CardList.scss';
 // components
 import Card from '../../Card/Card';
 
-// react + context
+// react + context + router
 import { useContext, useState, useEffect } from "react";
 import { MovieContext } from '../../MovieContext/MovieContext';
+import { Link } from 'react-router-dom';
 
 // types
 import type { Movie } from '../../MovieContext/MovieContext';
@@ -54,7 +55,7 @@ function CardList({contentType} : CardListProps) {
             <div className="card-list-text">
                 <h2 className="card-list-title">{contentType}</h2>
 
-                <p className="card-title-link">See all</p>
+                <p className="card-title-link"><Link to={contentType === 'Movies' ? '/movies' : '/tvshows'}>See all</Link></p>
             </div>
 
             <div className="cards">

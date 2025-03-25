@@ -1,0 +1,51 @@
+.movies-page {
+    padding: 2rem 0;
+}
+
+.movies-page-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.5rem;
+
+    select {
+        color: #fff;
+    }
+}
+
+.movies-page-title {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.movie-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    padding: 2rem 0;
+    place-items: center center;
+}
+
+@media (max-width: 1024px) {
+    .movie-list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .movies-page-title {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 425px) {
+    .movies-page-title {
+        font-size: 1.65rem;
+    }
+}
