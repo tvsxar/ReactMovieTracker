@@ -67,17 +67,17 @@
 }
 
 @media (max-width: 1024px) {
-    .movie-list {
+    .content-list {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
 @media (max-width: 768px) {
-    .movie-list {
+    .content-list {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .movies-page-title {
+    .content-page-title {
         font-size: 1.75rem;
     }
 
@@ -93,7 +93,7 @@
 }
 
 @media (max-width: 425px) {
-    .movies-page-title {
+    .content-page-title {
         font-size: 1.65rem;
     }
 }
