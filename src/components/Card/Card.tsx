@@ -4,6 +4,10 @@ import './Card.scss';
 import { useContext, useState, useEffect } from "react";
 import { MovieContext } from '../MovieContext/MovieContext';
 
+// images
+import flame from '../../assets/flame.svg';
+import win from '../../assets/win.svg';
+
 // types
 interface CardProps {
     movie?: {
@@ -17,9 +21,10 @@ interface CardProps {
         vote_average: number,
     };
     isMini?: boolean;
+    type?: string;
 }
 
-function Card({movie, isMini} : CardProps) {
+function Card({movie, isMini, type} : CardProps) {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const { allGenres } = useContext(MovieContext) ?? { allGenres: [] };
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
@@ -48,6 +53,10 @@ function Card({movie, isMini} : CardProps) {
 
     return (
         <div className={`card ${isMini ? 'mini' : ''}`} style={{backgroundImage: `url(${IMAGE_BASE_URL}${isMobile || isMini ? movie.poster_path : movie.backdrop_path})`}}>
+            {type && <div className="card-type">
+                {type}
+            <img src={type === 'Trending' ? flame : win} alt="rating" />
+            </div>}
             <div className="card-title-container">
                 <div className="card-title">{movie.name || movie.title}</div>
 

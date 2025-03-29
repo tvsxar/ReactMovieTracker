@@ -1,8 +1,9 @@
 import './HeaderContent.scss';
 
-// react + context
+// react + context + router
 import { useContext, useState, useEffect } from "react";
 import { MovieContext } from '../../MovieContext/MovieContext'; 
+import { useLocation } from "react-router-dom";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,12 +18,38 @@ interface HeaderContentProps {
 }
 
 function HeaderContent({setBackground} : HeaderContentProps) {
-    const { trending } = useContext(MovieContext) ?? { trending: [] };
+    const { trending, fetchTopRatedContent } = useContext(MovieContext) ?? { trending: [], fetchTopRatedContent: async () => [] };
     const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
+    const [content, setContent] = useState<Movie[]>([]);
+    const [type, setType] = useState<string>('trending');
+
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+    const isMoviesPage = location.pathname === '/movies';
+    const isTVShowsPage = location.pathname === '/tvshows';
 
     useEffect(() => {
-        if (trending.length > 0) {
-            const shuffled = [...trending]
+        const fetchContent = async () => {
+            if (isHomePage) {
+                setContent(trending);
+                setType('Trending');
+            } else if (isMoviesPage && fetchTopRatedContent) {
+                const topRatedMovies = await fetchTopRatedContent('movie');
+                setContent(topRatedMovies); // Set the resolved array of movies
+                setType('Top Rated Movies');
+            } else if (isTVShowsPage && fetchTopRatedContent) {
+                const topRatedShows = await fetchTopRatedContent('tv');
+                setContent(topRatedShows); // Set the resolved array of TV shows
+                setType('Top Rated TV Shows');
+            }
+        }
+
+        fetchContent();
+    }, [isHomePage, isMoviesPage, isTVShowsPage, trending, fetchTopRatedContent])
+
+    useEffect(() => {
+        if (content.length > 0) {
+            const shuffled = [...content]
                 .sort(() => 0.5 - Math.random()) // mix
                 .filter(movie => movie.backdrop_path && movie.poster_path) // only with bg
                 .slice(0, 5); // 5 random
@@ -30,7 +57,7 @@ function HeaderContent({setBackground} : HeaderContentProps) {
             setRandomMovies(shuffled);
             setBackground(shuffled[0]?.backdrop_path || '');
         }
-    }, [trending]);
+    }, [content]);
 
     return (
         <div className="header-content">
@@ -47,7 +74,7 @@ function HeaderContent({setBackground} : HeaderContentProps) {
             >
                 {randomMovies.map((movie) => (
                     <SwiperSlide key={movie.id}>
-                        <Card movie={movie} />
+                        <Card type={type} movie={movie} />
                     </SwiperSlide>
                 ))}
             </Swiper>

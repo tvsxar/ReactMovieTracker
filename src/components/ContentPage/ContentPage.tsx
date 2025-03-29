@@ -15,7 +15,8 @@ interface contentPageProps {
 
 function ContentPage({ type }: contentPageProps) {
     // context
-    const { movies, shows, moviePage, showPage, movieGenres, showGenres, nextPageMovies, nextPageShows, prevPageMovies, prevPageShows, setFirstPage } = useContext(MovieContext) ?? {
+    const { movies, shows, moviePage, showPage, movieGenres, showGenres, fetchContentByGenre,
+    nextPageMovies, nextPageShows, prevPageMovies, prevPageShows, setFirstPage } = useContext(MovieContext) ?? {
         movies: [],
         shows: [],
         moviePage: 1,
@@ -28,6 +29,7 @@ function ContentPage({ type }: contentPageProps) {
         nextPageMovies: () => {},
         prevPageMovies: () => {},
         setFirstPage: () => {},
+        fetchContentByGenre: async () => [],
     };
     const content = type === 'Movies' ? movies : shows;
     const contentGenres = type === 'Movies' ? movieGenres : showGenres;
@@ -35,32 +37,23 @@ function ContentPage({ type }: contentPageProps) {
     const [filteredContent, setFilteredContent] = useState<Movie[]>(content);
 
     useEffect(() => {
-        if (selectedGenre) {
-            const filtered = filterByGenre(selectedGenre, type);
-            setFilteredContent(filtered);
-        } else if(selectedGenre === '') {
-            setFilteredContent(content); // Reset to all content if no genre is selected
-        }
-    }, [selectedGenre, type, content]);
-
-    // functions
-    function filterByGenre(genreName: string, type: 'Movies' | 'TV Shows') : Movie[] {
-        if(type === 'Movies') {
-            const genre = movieGenres.find(genre => genre.name === genreName)
-            if(genre) {
-                return movies.filter(movie => movie.genre_ids.includes(genre.id));
+        const fetchFilteredContent = async () => {
+            if (selectedGenre !== '') {
+                const genre = contentGenres.find(genre => genre.name === selectedGenre);
+                if (genre) {
+                    const filtered = await fetchContentByGenre(genre.id, type === 'Movies' ? moviePage : showPage, type);
+                    setFilteredContent(filtered); // Set the resolved array of movies/shows
+                }
+            } else {
+                setFilteredContent(content); // Reset to all content if no genre is selected
             }
+        };
+    
+        fetchFilteredContent();
+    }, [selectedGenre, type, content, contentGenres, moviePage, showPage, fetchContentByGenre]);
 
-            return movies;
-        } else {
-            const genre = showGenres.find(genre => genre.name === genreName)
-            if(genre) {
-                return shows.filter(show => show.genre_ids.includes(genre.id));
-            }
-
-            return shows;
-        }
-    }
+    // filter content
+    
 
     // handlers
     const handleNextPage = () => {
@@ -83,10 +76,10 @@ function ContentPage({ type }: contentPageProps) {
 
 
     return (
-        <section className="movies-page">
+        <section className="content-page">
             <div className="container">
-                <div className="movies-page-text">
-                    <div className="movies-page-title">Popular {type}</div>
+                <div className="content-page-text">
+                    <div className="content-page-title">Popular {type}</div>
 
                     <select value={selectedGenre} onChange={e => {
                         setFirstPage();
@@ -103,7 +96,7 @@ function ContentPage({ type }: contentPageProps) {
                     </select>
                 </div>
 
-                <div className="movie-list">
+                <div className="content-list">
                     {filteredContent.map(content => (
                         <Card key={content.id} isMini={true} movie={content} />
                     ))}

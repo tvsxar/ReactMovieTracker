@@ -32,6 +32,9 @@ interface MovieContextType {
     nextPageShows: () => void;
     prevPageShows: () => void;
     setFirstPage: () => void;
+
+    fetchContentByGenre: (genreId: number, page: number, type: 'Movies' | 'TV Shows') => Promise<Movie[]>;
+    fetchTopRatedContent: (type: 'movie' | 'tv') => Promise<Movie[]>;
 }
 
 interface MovieProviderProps {
@@ -81,6 +84,27 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         } catch (error) {
             console.error('Loading trending movies error:', error);
         }
+    }
+
+    async function fetchTopRatedContent(type : 'movie' | 'tv') {
+        try {
+            const response = await fetch(`${BASE_URL}/${type}/top_rated?api_key=${API_KEY}`);
+            const data = await response.json();
+            
+            return data.results;
+        } catch (error) {
+            console.error('Loading top rated movies error:', error)
+        }
+    }
+
+    // content by genre
+    async function fetchContentByGenre(genreId: number, page: number, type: 'Movies' | 'TV Shows') {
+        const response = await fetch(
+          `${BASE_URL}/discover/${type === 'Movies' ? 'movie' : 'tv'}?api_key=${API_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`
+        );
+        const data = await response.json();
+
+        return data.results;
     }
 
     useEffect(() => {
@@ -141,8 +165,8 @@ export function MovieProvider({ children } : MovieProviderProps)  {
     }
 
     return (
-        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, 
-        nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
+        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, fetchContentByGenre,
+            fetchTopRatedContent, nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
           {children}
         </MovieContext.Provider>
     );

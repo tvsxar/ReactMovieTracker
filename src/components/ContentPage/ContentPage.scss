@@ -1,8 +1,8 @@
-.movies-page {
+.content-page {
     padding: 2rem 0;
 }
 
-.movies-page-text {
+.content-page-text {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -13,14 +13,14 @@
     }
 }
 
-.movies-page-title {
+.content-page-title {
     font-size: 2rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
 }
 
-.movie-list {
+.content-list {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
