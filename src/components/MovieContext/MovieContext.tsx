@@ -17,20 +17,21 @@ export interface Genre {
     name: string,
 }
 
-interface GenreList {
-    genres: Genre[]
-}
-
 interface MovieContextType {
-    genres: Genre[];
-    movieGenres: GenreList;
-    showGenres: GenreList;
+    allGenres: Genre[],
+    movieGenres: Genre[];
+    showGenres: Genre[];
     movies: Movie[];
     shows: Movie[];
     trending: Movie[];
-    filteredMovies?: Movie[];
-    filteredShows?: Movie[];
-    filterByGenre: (genreId: number, type: 'movie' | 'tv') => void;
+
+    moviePage: number;
+    showPage: number;
+    nextPageMovies: () => void;
+    prevPageMovies: () => void;
+    nextPageShows: () => void;
+    prevPageShows: () => void;
+    setFirstPage: () => void;
 }
 
 interface MovieProviderProps {
@@ -41,36 +42,37 @@ interface MovieProviderProps {
 export const MovieContext = createContext<MovieContextType | null>(null);
 
 export function MovieProvider({ children } : MovieProviderProps)  {
-    const [genres, setGenres] = useState<Genre[]>([]);
-    const [movieGenres, setMovieGenres] = useState<GenreList>({ genres: [] });
-    const [showGenres, setShowGenres] = useState<GenreList>({ genres: [] });
+    const [movieGenres, setMovieGenres] = useState<Genre[]>([]);
+    const [showGenres, setShowGenres] = useState<Genre[]>([]);
+    const [allGenres, setAllGenres] = useState<Genre[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [shows, setShows] = useState<Movie[]>([]);
     const [trending, setTrending] = useState<Movie[]>([]);
-    const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
-    const [filteredShows, setFilteredShows] = useState<Movie[]>([]);
+    const [moviePage, setMoviePage] = useState<number>(1);
+    const [showPage, setShowPage] = useState<number>(1);
+
     // API
     const API_KEY = `deddcdf61311b4dd7da8c0a3d2bf5042`;
     const BASE_URL = `https://api.themoviedb.org/3`;
 
-    // genres
+    // Fetch genres
     async function fetchGenres() {
         try {
             const movieGenresRes = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`);
             const movieGenresData = await movieGenresRes.json();
-            setMovieGenres(movieGenresData);
+            setMovieGenres(movieGenresData.genres);
                 
             const tvGenresRes = await fetch(`${BASE_URL}/genre/tv/list?api_key=${API_KEY}&language=en-US`);
             const tvGenresData = await tvGenresRes.json();
-            setShowGenres(tvGenresData);
-                
-            setGenres([...movieGenresData.genres, ...tvGenresData.genres]);
+            setShowGenres(tvGenresData.genres);
+
+            setAllGenres([...movieGenresData.genres, ...tvGenresData.genres])
         } catch(err) {
             console.error('Loading genres error:', err);
         }
     }
 
-    // trending movies
+    // Fetch trending movies
     async function fetchTrendingMovies() {
         try {
             const response = await fetch(`${BASE_URL}/trending/all/day?api_key=${API_KEY}`);
@@ -81,45 +83,66 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         }
     }
 
-    // popular movies
-    async function fetchMovies() {
-        try {
-            const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
-            const data = await response.json();
-            setMovies(data.results);
-        } catch (error) {
-            console.error('Loading movies error:', error);
-        }
-    }
-
-    // popular shows
-    async function fetchShows() {
-        try {
-            const response = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}`);
-            const data = await response.json();
-            setShows(data.results);
-        } catch (error) {
-            console.error('Loading series error:', error);
-        }  
-    }
-
-    function filterByGenre(genreId: number, type: 'movie' | 'tv') {
-        if(type === 'movie') {
-            setFilteredMovies(movies.filter(movie => movie.genre_ids.includes(genreId)));
-        } else {
-            setFilteredShows(shows.filter(show => show.genre_ids.includes(genreId)));
-        }
-    }
-
     useEffect(() => {
         fetchGenres();
-        fetchMovies();
-        fetchShows();
         fetchTrendingMovies();
     }, []);
 
+    useEffect(() => {
+        async function fetchAllMovies(page: number) {
+            try {
+                const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`);
+                const data = await response.json();
+
+                setMovies(data.results);
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+            }
+        }
+    
+        fetchAllMovies(moviePage);
+    }, [moviePage]);
+
+    useEffect(() => {
+        async function fetchAllShows(page: number) {
+            try {
+                const response = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&page=${page}`);
+                const data = await response.json();
+
+                setShows(data.results);
+            } catch (error) {
+                console.error("Error fetching shows:", error);
+            }
+        }
+
+        fetchAllShows(showPage);
+    }, [showPage])
+
+    // pagination
+    function nextPageMovies() {
+        setMoviePage(prev => prev + 1);
+    }
+    
+    function prevPageMovies() {
+        setMoviePage(prev => (prev > 1 ? prev - 1 : 1));
+    }
+    
+    function nextPageShows() {
+        setShowPage(prev => prev + 1);
+    }
+    
+    function prevPageShows() {
+        setShowPage(prev => (prev > 1 ? prev - 1 : 1));
+    }
+
+    function setFirstPage() {
+        setMoviePage(1);
+        setShowPage(1);
+    }
+
     return (
-        <MovieContext.Provider value={{ genres, movies, shows, trending, movieGenres, showGenres, filterByGenre }}>
+        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, 
+        nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
           {children}
         </MovieContext.Provider>
     );

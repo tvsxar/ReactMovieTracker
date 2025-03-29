@@ -14,7 +14,7 @@
     &.mini {
         max-width: 15rem;
         width: 100%;
-        height: 20rem;
+        max-height: 25rem;
         transition: all 0.3s ease-in-out;
 
         .card-title-container {
@@ -72,7 +72,7 @@
         height: 27.5rem;
 
         &.mini {
-            height: 17.5rem;
+            max-height: 20rem;
 
             .card-title {
                 font-size: 1.15rem;
@@ -98,7 +98,7 @@
         height: 32.5rem;
 
         &.mini {
-            height: 22.5rem;
+            max-height: 22.5rem;
 
             .card-title {
                 font-size: 1.5rem;

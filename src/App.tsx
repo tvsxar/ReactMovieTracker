@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // components
 import Header from './components/Header/Header';
 import Recommendations from './components/Recommendations/Recommendations';
-import MoviesPage from './components/MoviesPage/MoviesPage';
+import ContentPage from './components/ContentPage/ContentPage';
 import Footer from './components/Footer/Footer';
 
 function App() {
@@ -17,8 +17,8 @@ function App() {
         
          <Routes>
             <Route path="/" element={<Recommendations />} />
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/tvshows" element={<Recommendations />} />
+            <Route path="/movies" element={<ContentPage key="movies" type={'Movies'} />} />
+            <Route path="/tvshows" element={<ContentPage key="tvshows" type={'TV Shows'} />} />
             <Route path="/saved" element={<Recommendations />} />
           </Routes>
         

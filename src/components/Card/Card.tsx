@@ -21,7 +21,7 @@ interface CardProps {
 
 function Card({movie, isMini} : CardProps) {
     const [isMobile, setIsMobile] = useState<boolean>(false);
-    const { genres } = useContext(MovieContext) ?? { genres: [] };
+    const { allGenres } = useContext(MovieContext) ?? { allGenres: [] };
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
     if (!movie) {
@@ -40,7 +40,7 @@ function Card({movie, isMini} : CardProps) {
     }, [])
 
     function getGenre(genre_ids : number[]) {
-        return genres
+        return allGenres
         .filter(genre => genre_ids.includes(genre.id))
         .map(genre => genre.name)
         .join(', ')

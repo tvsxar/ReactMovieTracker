@@ -15,7 +15,7 @@ interface CardListProps {
 }
 
 function CardList({contentType} : CardListProps) {
-    const { movies, shows } = useContext(MovieContext) ?? { movies: [], shows: [] };
+    const { movies, shows, setFirstPage } = useContext(MovieContext) ?? { movies: [], shows: [], setFirstPage: () => {} };
     const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
     const [slideAmount, setSlideAmount] = useState<number>(6);
 
@@ -55,7 +55,7 @@ function CardList({contentType} : CardListProps) {
             <div className="card-list-text">
                 <h2 className="card-list-title">{contentType}</h2>
 
-                <p className="card-title-link"><Link to={contentType === 'Movies' ? '/movies' : '/tvshows'}>See all</Link></p>
+                <p className="card-title-link" onClick={setFirstPage}><Link to={contentType === 'Movies' ? '/movies' : '/tvshows'}>See all</Link></p>
             </div>
 
             <div className="cards">
