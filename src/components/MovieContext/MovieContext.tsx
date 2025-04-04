@@ -10,6 +10,12 @@ export interface Movie {
     genre_ids: number[],
     overview: string,
     vote_average: number,
+    media_type?: 'movie' | 'tv';
+    trailer? : string;
+    genres?: { id: number; name: string }[];
+    release_date?: string;
+    first_air_date?: string;
+    production_countries?: { iso_3166_1: string; name: string }[];
 }
 
 export interface Genre {
@@ -35,6 +41,8 @@ interface MovieContextType {
 
     fetchContentByGenre: (genreId: number, page: number, type: 'Movies' | 'TV Shows') => Promise<Movie[]>;
     fetchTopRatedContent: (type: 'movie' | 'tv') => Promise<Movie[]>;
+    fetchContentById: (id: number, type: 'movie' | 'tv') => Promise<Movie>;
+    fetchSimilarContent: (id: number, type: 'movie' | 'tv') => Promise<Movie[]>;
 }
 
 interface MovieProviderProps {
@@ -80,7 +88,13 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         try {
             const response = await fetch(`${BASE_URL}/trending/all/day?api_key=${API_KEY}`);
             const data = await response.json();
-            setTrending(data.results);
+
+            const filtered = data.results.filter((item: any) =>
+                item.overview?.trim() &&
+                item.poster_path &&
+                Array.isArray(item.genre_ids) && item.genre_ids.length > 0
+            );
+            setTrending(filtered);
         } catch (error) {
             console.error('Loading trending movies error:', error);
         }
@@ -91,9 +105,49 @@ export function MovieProvider({ children } : MovieProviderProps)  {
             const response = await fetch(`${BASE_URL}/${type}/top_rated?api_key=${API_KEY}`);
             const data = await response.json();
             
-            return data.results;
+            const filtered = data.results.filter((item: any) =>
+                item.overview?.trim() &&
+                item.poster_path &&
+                Array.isArray(item.genre_ids) && item.genre_ids.length > 0
+            );
+
+            return filtered;
         } catch (error) {
             console.error('Loading top rated movies error:', error)
+        }
+    }
+
+    async function fetchContentById(id: number, type: 'movie' | 'tv') {
+        try {
+            const response = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
+            const data = await response.json();
+
+            const videoResponse = await fetch(`${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}`);
+            const videoData = await videoResponse.json();
+
+            const trailer = videoData.results.find((video: any) => video.type === "Trailer" && video.site === "YouTube");
+
+            return { ...data, trailer: trailer ? `https://www.youtube.com/embed/${trailer.key}` : null };
+        } catch(error) {
+            console.error('Loading content by ID error:', error);
+            return null;
+        }
+    }
+
+    async function fetchSimilarContent(id: number, type: 'movie' | 'tv') {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/${type}/${id}/similar?api_key=${API_KEY}`);
+            const data = await response.json();
+
+            const filtered = data.results.filter((item: any) =>
+                item.overview?.trim() &&
+                item.poster_path &&
+                Array.isArray(item.genre_ids) && item.genre_ids.length > 0
+            );
+
+            return filtered.slice(0, 5);
+        } catch(error) {
+            console.error('Loading similar content error:', error);
         }
     }
 
@@ -118,7 +172,12 @@ export function MovieProvider({ children } : MovieProviderProps)  {
                 const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`);
                 const data = await response.json();
 
-                setMovies(data.results);
+                const filtered = data.results.filter((item: any) =>
+                    item.overview?.trim() &&
+                    item.poster_path &&
+                    Array.isArray(item.genre_ids) && item.genre_ids.length > 0
+                );
+                setMovies(filtered);
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
@@ -133,7 +192,12 @@ export function MovieProvider({ children } : MovieProviderProps)  {
                 const response = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&page=${page}`);
                 const data = await response.json();
 
-                setShows(data.results);
+                const filtered = data.results.filter((item: any) =>
+                    item.overview?.trim() &&
+                    item.poster_path &&
+                    Array.isArray(item.genre_ids) && item.genre_ids.length > 0
+                );
+                setShows(filtered);
             } catch (error) {
                 console.error("Error fetching shows:", error);
             }
@@ -165,7 +229,7 @@ export function MovieProvider({ children } : MovieProviderProps)  {
     }
 
     return (
-        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, fetchContentByGenre,
+        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, fetchContentByGenre, fetchContentById, fetchSimilarContent,
             fetchTopRatedContent, nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
           {children}
         </MovieContext.Provider>

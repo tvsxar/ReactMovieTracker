@@ -1,0 +1,145 @@
+.content-info {
+    padding: 2rem 0;
+}
+
+.content-info-title {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.content-info-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3rem 0;
+
+    iframe {
+        max-width: 60rem;
+        width: 100%;
+        height: 35rem;
+        border: 0.2rem solid grey;
+        border-radius: 1rem;
+    }
+
+    .content-poster {
+        max-width: 60rem;
+        width: 100%;
+        height: 35rem;
+        border: 0.2rem solid grey;
+        border-radius: 1rem;
+    }
+}
+
+.content-info-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+
+    .content-title {
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: 1rem;
+    }
+
+    .content-rating {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+
+        .star {
+            width: 1.25rem;
+        }
+    }
+}
+
+.content-details {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.content-description {
+    .about-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .description {
+        font-size: 1rem;
+        font-weight: 400;
+        max-width: 60rem;
+        margin-bottom: 3rem;
+    }
+}
+
+.similar-content {
+    .similar-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+}
+
+.similar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 1024px) {
+    .similar {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .content-info-player {
+        iframe {
+            max-width: 50rem;
+            height: 30rem;
+        }
+
+        .content-poster {
+            max-width: 50rem;
+            height: 30rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .similar {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        place-items: center center;
+    }
+
+    .content-info-player {
+        iframe {
+            max-width: 30rem;
+            height: 20rem;
+        }
+
+        .content-poster {
+            max-width: 30rem;
+            height: 20rem;
+        }
+    }
+}
+
+@media (max-width: 425px) {
+    .content-info-player {
+        iframe {
+            max-width: 20rem;
+            height: 12rem;
+        }
+
+        .content-poster {
+            max-width: 20rem;
+            height: 12rem;
+        }
+    }
+}

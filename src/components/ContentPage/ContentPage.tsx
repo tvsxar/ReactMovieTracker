@@ -98,7 +98,7 @@ function ContentPage({ type }: contentPageProps) {
 
                 <div className="content-list">
                     {filteredContent.map(content => (
-                        <Card key={content.id} isMini={true} movie={content} />
+                        <Card type={type === 'Movies' ? 'movie' : 'tv'} key={content.id} isMini={true} movie={content} />
                     ))}
                 </div>
 

@@ -60,7 +60,7 @@ function CardList({contentType} : CardListProps) {
 
             <div className="cards">
                 {randomMovies.map((movie) => (
-                    <Card key={movie.id} isMini={true} movie={movie} />
+                    <Card type={contentType === 'Movies' ? 'movie' : 'tv'} key={movie.id} isMini={true} movie={movie} />
                 ))}
             </div>
         </div>

@@ -21,26 +21,27 @@ function HeaderContent({setBackground} : HeaderContentProps) {
     const { trending, fetchTopRatedContent } = useContext(MovieContext) ?? { trending: [], fetchTopRatedContent: async () => [] };
     const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
     const [content, setContent] = useState<Movie[]>([]);
-    const [type, setType] = useState<string>('trending');
+    const [info, setInfo] = useState<string>('Trending');
 
     const location = useLocation();
     const isHomePage = location.pathname === '/';
     const isMoviesPage = location.pathname === '/movies';
     const isTVShowsPage = location.pathname === '/tvshows';
 
+    // hooks
     useEffect(() => {
         const fetchContent = async () => {
             if (isHomePage) {
                 setContent(trending);
-                setType('Trending');
+                setInfo('Trending');
             } else if (isMoviesPage && fetchTopRatedContent) {
                 const topRatedMovies = await fetchTopRatedContent('movie');
                 setContent(topRatedMovies); // Set the resolved array of movies
-                setType('Top Rated Movies');
+                setInfo('Top Rated Movies');
             } else if (isTVShowsPage && fetchTopRatedContent) {
                 const topRatedShows = await fetchTopRatedContent('tv');
                 setContent(topRatedShows); // Set the resolved array of TV shows
-                setType('Top Rated TV Shows');
+                setInfo('Top Rated TV Shows');
             }
         }
 
@@ -59,8 +60,13 @@ function HeaderContent({setBackground} : HeaderContentProps) {
         }
     }, [content]);
 
+    // functions
+    const getType = (movie: Movie) => {
+        return movie.media_type || (isMoviesPage ? 'movie' : 'tv');
+    };
+
     return (
-        <div className="header-content">
+        <div className='header-content'>
             <Swiper
                 spaceBetween={0}
                 slidesPerView={1}
@@ -74,7 +80,7 @@ function HeaderContent({setBackground} : HeaderContentProps) {
             >
                 {randomMovies.map((movie) => (
                     <SwiperSlide key={movie.id}>
-                        <Card type={type} movie={movie} />
+                        <Card type={getType(movie)} info={info} movie={movie} />
                     </SwiperSlide>
                 ))}
             </Swiper>
