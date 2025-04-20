@@ -8,8 +8,10 @@ import {useState} from 'react';
 import searchImg from '../../../assets/search-icon.svg';
 
 function HeaderNav() {
+    // navigation menu state
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
+    // toggle menu open/close
     function toggleMenu() {
         setIsMenuOpen(prev => !prev)
     }

@@ -57,7 +57,7 @@ function Card({movie, isMini, info, type} : CardProps) {
         <Link to={`/info/${type?.toLowerCase()}/${movie.id}`} className={`card ${isMini ? 'mini' : ''}`} style={{backgroundImage: `url(${IMAGE_BASE_URL}${isMobile || isMini ? movie.poster_path : movie.backdrop_path})`}}>
             {info && <div className="card-info">
                 {info}
-            <img src={info === 'Trending' ? flame : win} alt="rating" />
+            <img loading="lazy" src={info === 'Trending' ? flame : win} alt="rating" />
             </div>}
             <div className="card-title-container">
                 <div className="card-title">{movie.name || movie.title}</div>

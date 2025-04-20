@@ -12,7 +12,7 @@ import Card from '../Card/Card';
 import { Movie } from '../MovieContext/MovieContext';
 
 // images
-import star from '../../assets/star.svg';
+import rating from '../../assets/rating.svg';
 
 function ContentInfo() {
     const { fetchContentById, fetchSimilarContent } = useContext(MovieContext) ?? { fetchContentById: async () => {}, fetchSimilarContent: async () => [] };
@@ -20,6 +20,12 @@ function ContentInfo() {
     const [similarContent, setSimilarContent] = useState<Movie[]>([]);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const { id, type } = useParams();
+
+    // scroll to top on mount
+    // This effect runs when the component mounts and scrolls to the top of the page
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [content]);
 
     // responsiveness
     useEffect(() => {
@@ -81,7 +87,7 @@ function ContentInfo() {
                             <h2 className="content-title">{content?.title || content?.name}</h2>
 
                             <div className="content-rating">
-                                <img src={star} alt="star" className="star" />
+                                <img src={rating} alt="star" className="star" />
 
                                 <p className="rating">{`${content?.vote_average}/10`}</p>
                             </div>
