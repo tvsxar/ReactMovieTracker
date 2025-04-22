@@ -19,7 +19,7 @@ function HeaderNav() {
 
     // suggestions list
     const [suggestions, setSuggestions] = useState<Movie[]>([]);
-    const [results, setResults] = useState<Movie[]>([]);
+    // const [results, setResults] = useState<Movie[]>([]);
     const [query, setQuery] = useState<string>('');
 
     // toggle menu open/close
@@ -36,7 +36,7 @@ function HeaderNav() {
         async function searchByQuery() {
             const list = await fetchContentByInput(query);
             setSuggestions(list.slice(0, 5));
-            setResults(list);
+            // setResults(list);
         }
 
         const delay = setTimeout(searchByQuery, 300);
