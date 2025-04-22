@@ -43,6 +43,7 @@ interface MovieContextType {
     fetchTopRatedContent: (type: 'movie' | 'tv') => Promise<Movie[]>;
     fetchContentById: (id: number, type: 'movie' | 'tv') => Promise<Movie>;
     fetchSimilarContent: (id: number, type: 'movie' | 'tv') => Promise<Movie[]>;
+    fetchContentByInput: (query: string) => Promise<Movie[]>;
 }
 
 interface MovieProviderProps {
@@ -161,6 +162,22 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         return data.results;
     }
 
+    // content by input search
+    async function fetchContentByInput(query: string) : Promise<Movie[]> {
+        try {
+            const response = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            const filtered = data.results.filter((item: any) =>
+                item.poster_path &&
+                Array.isArray(item.genre_ids) && item.genre_ids.length > 0
+            );
+            return filtered;
+        } catch(error) {
+            console.error('Loading content by input error:', error);
+            return [];
+        }
+    }
+
     useEffect(() => {
         fetchGenres();
         fetchTrendingMovies();
@@ -230,7 +247,7 @@ export function MovieProvider({ children } : MovieProviderProps)  {
 
     return (
         <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, fetchContentByGenre, fetchContentById, fetchSimilarContent,
-            fetchTopRatedContent, nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
+            fetchTopRatedContent, fetchContentByInput, nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
           {children}
         </MovieContext.Provider>
     );
