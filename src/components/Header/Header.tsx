@@ -15,19 +15,20 @@ function Header() {
 
     const location = useLocation();
     const isCardInfo = matchPath("/info/:type/:id", location.pathname);
+    const isSearchPage = location.pathname === '/search';
 
     useEffect(() => {
-        if (isCardInfo) {
+        if (isCardInfo || isSearchPage) {
             setBackground(null);
         }
 
-    }, [isCardInfo])
+    }, [isCardInfo, isSearchPage])
 
     return (
         <header className={`header ${isCardInfo ? 'header-card' : ''}`} style={{backgroundImage: background ? `url(${IMAGE_BASE_URL}${background})` : 'none'}}>
             <div className="container">
                 <HeaderNav />
-                {!isCardInfo && <HeaderContent setBackground={setBackground} />}
+                {!(isCardInfo || isSearchPage) && <HeaderContent setBackground={setBackground} />}
             </div>
         </header>
     )

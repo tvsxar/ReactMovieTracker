@@ -112,9 +112,11 @@ function ContentInfo() {
                         <h4 className="similar-title">Similar content</h4>
 
                         <div className="similar">
-                            {displayedSimilar?.map((movie) => (
+                            {displayedSimilar.length > 0 ? (displayedSimilar?.map((movie) => (
                                 <Card key={movie.id} movie={movie} type={type as 'movie' | 'tv'} isMini />
-                            ))}
+                            ))) : (
+                                <p>{`No similar content :(`}</p>
+                            )}
                         </div>
                     </div>
                 </div>

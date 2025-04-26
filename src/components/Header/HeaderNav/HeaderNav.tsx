@@ -1,7 +1,7 @@
 import './HeaderNav.scss';
 
 // react + Link
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {useState, useEffect, useContext} from 'react';
 import { MovieContext } from '../../MovieContext/MovieContext'; 
 
@@ -19,8 +19,18 @@ function HeaderNav() {
 
     // suggestions list
     const [suggestions, setSuggestions] = useState<Movie[]>([]);
-    // const [results, setResults] = useState<Movie[]>([]);
     const [query, setQuery] = useState<string>('');
+    const navigate = useNavigate();
+
+    // search page
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        if (query.trim() !== '') {
+            navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+            setQuery('');
+        }
+    }
 
     // toggle menu open/close
     function toggleMenu() {
@@ -29,6 +39,7 @@ function HeaderNav() {
 
     function closeMenu() {
         setIsMenuOpen(false);
+        setQuery('');
     }
 
     // hooks
@@ -36,7 +47,6 @@ function HeaderNav() {
         async function searchByQuery() {
             const list = await fetchContentByInput(query);
             setSuggestions(list.slice(0, 5));
-            // setResults(list);
         }
 
         const delay = setTimeout(searchByQuery, 300);
@@ -65,9 +75,9 @@ function HeaderNav() {
             </ul>
 
             <div className="nav-form-wrapper">
-                <form className='nav-form'>
+                <form className='nav-form' onSubmit={handleSubmit}>
                     <input value={query}  placeholder='Enter title...' type="text" onChange={(e) => setQuery(e.target.value)} />
-                    <button className='search-btn'>
+                    <button type='submit' className='search-btn'>
                         <img src={searchImg} alt="search" />
                     </button>
                 </form>
@@ -78,7 +88,12 @@ function HeaderNav() {
                             <li key={item.id} onClick={closeMenu}>
                                 <Link to={`/info/${item.media_type}/${item.id}`} className='suggestion-item' onClick={() => setQuery('')}>
                                     <img src={`https://image.tmdb.org/t/p/w92${item.poster_path}`} loading='lazy' alt={item.title || item.name} />
-                                    <span>{item.title || item.name}</span>
+                                    <div className="item-info">
+                                        <span>{item.title || item.name}</span>
+                                        <span className="year">
+                                            {(item.release_date || item.first_air_date || '').slice(0, 4)}
+                                        </span>
+                                    </div>
                                 </Link>
                             </li>
                         ))}

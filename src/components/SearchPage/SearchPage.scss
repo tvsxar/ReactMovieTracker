@@ -1,0 +1,67 @@
+.search-page {
+    padding: 2rem 0;
+}
+
+.search-title {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.search-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    padding: 2rem 0;
+    place-items: center center;
+}
+
+.no-results {
+    margin: 15rem auto;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+    .search-cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .search-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .search-title {
+        font-size: 1.75rem;
+    }
+
+    .no-results {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 425px) {
+    .search-title {
+        font-size: 1.65rem;
+    }
+
+    .no-results {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-height: 1000px) {
+    .no-results {
+        margin: 17.5rem auto;
+    }
+}
+
+@media (min-height: 1200px) {
+    .no-results {
+        margin: 25rem auto;
+    }
+}

@@ -7,6 +7,7 @@ import Header from './components/Header/Header';
 import Recommendations from './components/Recommendations/Recommendations';
 import ContentPage from './components/ContentPage/ContentPage';
 import ContentInfo from './components/ContentInfo/ContentInfo';
+import SearchPage from './components/SearchPage/SearchPage';
 import Footer from './components/Footer/Footer';
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route path="/saved" element={<Recommendations />} />
 
           <Route path="/info/:type/:id" element={<ContentInfo />} />
+
+          <Route path="/search" element={<SearchPage />} />
         </Routes>
         
         <Footer />
