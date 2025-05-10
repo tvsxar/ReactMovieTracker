@@ -5,11 +5,11 @@ import Card from '../../Card/Card';
 
 // react + context + router
 import { useContext, useState, useEffect } from "react";
-import { MovieContext } from '../../MovieContext/MovieContext';
+import { MovieContext } from '../../contexts/MovieContext';
 import { Link } from 'react-router-dom';
 
 // types
-import type { Movie } from '../../MovieContext/MovieContext';
+import type { Movie } from '../../contexts/MovieContext';
 interface CardListProps {
     contentType?: 'Movies' | 'TV Shows';
 }

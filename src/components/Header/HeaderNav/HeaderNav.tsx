@@ -3,10 +3,10 @@ import './HeaderNav.scss';
 // react + Link
 import { Link, useNavigate } from 'react-router-dom';
 import {useState, useEffect, useContext} from 'react';
-import { MovieContext } from '../../MovieContext/MovieContext'; 
+import { MovieContext } from '../../contexts/MovieContext'; 
 
 // types
-import type { Movie } from '../../MovieContext/MovieContext';
+import type { Movie } from '../../contexts/MovieContext';
 
 // images
 import searchImg from '../../../assets/search-icon.svg';
@@ -71,7 +71,7 @@ function HeaderNav() {
                 <li className="nav-item" onClick={closeMenu}><Link to='/'>Home</Link></li>
                 <li className="nav-item" onClick={closeMenu}><Link to='/movies'>Movies</Link></li>
                 <li className="nav-item" onClick={closeMenu}><Link to='/tvshows'>TV Shows</Link></li>
-                <li className="nav-item" onClick={closeMenu}><Link to='/saved'>Saved</Link></li>
+                <li className="nav-item" onClick={closeMenu}><Link to='/account'>Account</Link></li>
             </ul>
 
             <div className="nav-form-wrapper">

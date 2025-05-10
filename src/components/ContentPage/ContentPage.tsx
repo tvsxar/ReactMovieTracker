@@ -2,13 +2,13 @@ import './ContentPage.scss';
 
 // context + hooks
 import { useEffect, useContext, useState } from "react";
-import { MovieContext } from '../MovieContext/MovieContext';
+import { MovieContext } from '../contexts/MovieContext';
 
 // components
 import Card from '../Card/Card';
 
 // types
-import type { Genre, Movie } from '../MovieContext/MovieContext';
+import type { Genre, Movie } from '../contexts/MovieContext';
 interface contentPageProps {
     type: 'Movies' | 'TV Shows';
 }

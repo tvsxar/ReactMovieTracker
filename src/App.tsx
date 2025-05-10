@@ -1,5 +1,6 @@
 // provider + router
-import { MovieProvider } from "./components/MovieContext/MovieContext";
+import { MovieProvider } from "./components/contexts/MovieContext";
+import AuthProvider from "./components/contexts/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
@@ -8,13 +9,16 @@ import Recommendations from './components/Recommendations/Recommendations';
 import ContentPage from './components/ContentPage/ContentPage';
 import ContentInfo from './components/ContentInfo/ContentInfo';
 import SearchPage from './components/SearchPage/SearchPage';
+import AccountPage from './components/AccountPage/AccountPage';
 import Footer from './components/Footer/Footer';
 
 function App() {
 
   return (
-    <MovieProvider>
       <Router>
+        <AuthProvider>
+        <MovieProvider>
+
         <Header />
 
         <Routes>
@@ -29,12 +33,16 @@ function App() {
           <Route path="/info/:type/:id" element={<ContentInfo />} />
 
           <Route path="/search" element={<SearchPage />} />
+
+          <Route path="/account" element={<AccountPage />} />
         </Routes>
         
         <Footer />
+
+        </MovieProvider>
+        </AuthProvider>
       </Router>
-    </MovieProvider>
   )
 }
 
-export default App
+export default App;

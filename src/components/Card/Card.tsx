@@ -3,7 +3,7 @@ import './Card.scss';
 // react + context + chroma + router
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { MovieContext } from '../MovieContext/MovieContext';
+import { MovieContext } from '../contexts/MovieContext';
 
 // images
 import flame from '../../assets/flame.svg';

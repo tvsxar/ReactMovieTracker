@@ -3,23 +3,56 @@ import './ContentInfo.scss';
 // react + context + router
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { MovieContext } from '../MovieContext/MovieContext';
+import { MovieContext } from '../contexts/MovieContext';
+import { useAuth } from '../contexts/AuthContext';
 
 // components
 import Card from '../Card/Card';
 
 // types
-import { Movie } from '../MovieContext/MovieContext';
+import { Movie } from '../contexts/MovieContext';
 
 // images
 import rating from '../../assets/rating.svg';
+import bookmark from '../../assets/bookmark.svg';
+import bookmarkOutline from '../../assets/bookmark-outline.svg';
 
 function ContentInfo() {
     const { fetchContentById, fetchSimilarContent } = useContext(MovieContext) ?? { fetchContentById: async () => {}, fetchSimilarContent: async () => [] };
     const [content, setContent] = useState<null | Movie>(null);
     const [similarContent, setSimilarContent] = useState<Movie[]>([]);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [isFavorite, setIsFavorite] = useState(false);
     const { id, type } = useParams();
+    const auth = useAuth();
+
+    function sanitizeMovie(movie: any, type: 'movie' | 'tv'): Movie {
+        return {
+          id: movie.id,
+          title: movie.title || '',
+          name: movie.name || '',
+          poster_path: movie.poster_path || '',
+          backdrop_path: movie.backdrop_path || '',
+          overview: movie.overview || '',
+          vote_average: movie.vote_average || 0,
+          genre_ids: (movie.genre_ids ?? movie.genres?.map((g: any) => g.id)) || [],
+          media_type: type,
+        };
+    }
+
+    const handleFavoriteToggle = async () => {
+        if (!content) return;
+      
+        const cleaned = sanitizeMovie(content, type as 'movie' | 'tv');
+      
+        if (isFavorite) {
+          await auth?.removeFromFavorites(cleaned.id);
+          setIsFavorite(false);
+        } else {
+          await auth?.addToFavorites(cleaned);
+          setIsFavorite(true);
+        }
+    };
 
     // scroll to top on mount
     // This effect runs when the component mounts and scrolls to the top of the page
@@ -54,13 +87,42 @@ function ContentInfo() {
         }
 
         fetchContent();
-    }, [id])
+    }, [id]);
+
+    useEffect(() => {
+        async function checkIfFavorite() {
+          if (auth?.user && content) {
+            const favs = await auth.getFavorites();
+            const exists = favs.some((item: Movie) => item.id === content.id);
+            setIsFavorite(exists);
+          }
+        }
+      
+        checkIfFavorite();
+    }, [content, auth]);
 
     return (
         <div className="content-info">
             <div className="container">
                 <div className="content-info-section">
-                    <h1 className="content-info-title">About</h1>
+                    <div className="content-info-title-container">
+                        <h1 className="content-info-title">About</h1>
+                        {auth?.user && content && (
+                            <button className="save-btn" onClick={handleFavoriteToggle}>
+                                {isFavorite ? (
+                                    <div className="save-btn-active">
+                                        <img src={bookmark} alt="bookmark" />
+                                        {/* <p>Remove from Favorites</p> */}
+                                    </div>
+                                ) : (
+                                    <div className="save-btn-inactive">
+                                        <img src={bookmarkOutline} alt="bookmarkOutline" />
+                                        {/* <p>Add to Favorites</p> */}
+                                    </div>
+                                )}
+                            </button>
+                        )}
+                    </div>
 
                     {content?.trailer ? (
                         <div className="content-info-player">

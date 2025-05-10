@@ -2,7 +2,7 @@ import './HeaderContent.scss';
 
 // react + context + router
 import { useContext, useState, useEffect } from "react";
-import { MovieContext } from '../../MovieContext/MovieContext'; 
+import { MovieContext } from '../../contexts/MovieContext'; 
 import { useLocation } from "react-router-dom";
 
 // Swiper
@@ -12,7 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Card from '../../Card/Card';
 
 // types
-import type { Movie } from '../../MovieContext/MovieContext';
+import type { Movie } from '../../contexts/MovieContext';
 interface HeaderContentProps {
     setBackground: (bg: string) => void;
 }

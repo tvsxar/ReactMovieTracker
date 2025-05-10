@@ -44,6 +44,7 @@ interface MovieContextType {
     fetchContentById: (id: number, type: 'movie' | 'tv') => Promise<Movie>;
     fetchSimilarContent: (id: number, type: 'movie' | 'tv') => Promise<Movie[]>;
     fetchContentByInput: (query: string) => Promise<Movie[]>;
+    fetchRecommendedContent: (favorites: Movie[], maxNumber: number) => Promise<Movie[]>;
 }
 
 interface MovieProviderProps {
@@ -178,6 +179,44 @@ export function MovieProvider({ children } : MovieProviderProps)  {
         }
     }
 
+    // get recommended movies and shows by my favourites
+    async function fetchRecommendedContent(favorites: Movie[], maxNumber: number): Promise<Movie[]> {
+        const allRecommended: Movie[] = [];
+        const seenIds = new Set<number>();
+
+        for(const item of favorites) {
+            if (!item.id || !item.media_type) continue;
+
+            try {
+                const response = await fetch(`https://api.themoviedb.org/3/${item.media_type}/${item.id}/similar?api_key=${API_KEY}`);
+                const data = await response.json();
+
+                const filtered = (data.results || []).filter(
+                    (movie: any) =>
+                        movie.overview?.trim() &&
+                        movie.poster_path &&
+                        Array.isArray(movie.genre_ids) &&
+                        movie.genre_ids.length > 0 &&
+                        !seenIds.has(movie.id) &&
+                        !favorites.some(fav => fav.id === movie.id)
+                );
+
+                filtered.forEach((movie: any) => {
+                    seenIds.add(movie.id);
+                    allRecommended.push({ ...movie, media_type: item.media_type });
+                });
+
+                if (allRecommended.length >= maxNumber) break;
+            } catch (error) {
+                console.error(`Error fetching recommendations for ${item.id}:`, error);
+            }
+        }
+
+        const shuffled = allRecommended.sort(() => Math.random() - 0.5);
+
+        return shuffled.slice(0, maxNumber);
+    }
+
     useEffect(() => {
         fetchGenres();
         fetchTrendingMovies();
@@ -246,7 +285,7 @@ export function MovieProvider({ children } : MovieProviderProps)  {
     }
 
     return (
-        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, fetchContentByGenre, fetchContentById, fetchSimilarContent,
+        <MovieContext.Provider value={{ allGenres, movies, shows, trending, movieGenres, showGenres, fetchContentByGenre, fetchContentById, fetchSimilarContent, fetchRecommendedContent,
             fetchTopRatedContent, fetchContentByInput, nextPageMovies, prevPageMovies, nextPageShows, prevPageShows, setFirstPage, moviePage, showPage }}>
           {children}
         </MovieContext.Provider>

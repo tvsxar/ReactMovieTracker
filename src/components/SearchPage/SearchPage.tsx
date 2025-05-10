@@ -3,13 +3,13 @@ import './SearchPage.scss';
 // react + router
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
-import { MovieContext } from '../MovieContext/MovieContext';
+import { MovieContext } from '../contexts/MovieContext';
 
 // components
 import Card from '../Card/Card';
 
 // type
-import type { Movie } from '../MovieContext/MovieContext';
+import type { Movie } from '../contexts/MovieContext';
 
 function SearchPage() {
     const { fetchContentByInput } = useContext(MovieContext) ?? { fetchContentByInput: async () => [] };
